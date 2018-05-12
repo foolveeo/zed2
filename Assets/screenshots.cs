@@ -48,22 +48,24 @@ public class screenshots : MonoBehaviour
         Debug.Log("screen width: " + Screen.width.ToString() + "screen height: " + Screen.height.ToString());
 
         Debug.Log("Called UploadPng");
-
+        
         Texture2D tex = new Texture2D(width, height, TextureFormat.RGB24, false);
 
         // Read screen contents into the texture
         tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
         tex.Apply();
-
+        
         // Encode texture into PNG
         bytesPNG = tex.EncodeToPNG();
         Destroy(tex);
-
-        // For testing purposes, also write to a file in the project folder
-        //
-        if(isSavingScreenShots)
+        
+        
+       
+        if (isSavingScreenShots)
         {
-            saveScreenshot();
+           // Texture2D tex = zedCam.GetComponent<ZEDRenderingPlane>().TextureEye;
+           // bytesPNG = tex.EncodeToPNG();
+            //saveScreenshot();
         }
         
         yield return null;

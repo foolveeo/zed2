@@ -29,7 +29,7 @@ public class Client : MonoBehaviour {
     {
         receivedMsg = "";
         ConnectToTcpServer();
-        bytesScreenshotPNG = new byte[8192];
+        bytesScreenshotPNG = new byte[65536];
         if (sendCheckerboardBtn != null)
         {
             sendCheckerboardBtn.onClick.AddListener(SendCheckerboardScreenShot);
@@ -98,6 +98,7 @@ public class Client : MonoBehaviour {
         Debug.Log("Sending screenshot");
         if (socketConnection == null)
         {
+            
             Debug.Log("not really...no TCP connection");
             return;
         }
