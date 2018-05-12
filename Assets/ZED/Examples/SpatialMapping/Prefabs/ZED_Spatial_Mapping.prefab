@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4695795446731942}
   - component: {fileID: 114238232927226582}
-  - component: {fileID: 114309790334092326}
   m_Layer: 0
   m_Name: ZED_Spatial_Mapping
   m_TagString: Untagged
@@ -58,18 +57,4 @@ MonoBehaviour:
   isTextured: 0
   saveWhenOver: 0
   meshPath: ZEDMesh.obj
-  filterParameters: 3
---- !u!114 &114309790334092326
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1066507924608964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22f4afa9b0f4846429e40a58e2e69423, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentTypeID: 0
-  hideFlag: 0
-  isOver: 0
+  filterParameters: 0
