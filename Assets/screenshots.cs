@@ -13,8 +13,7 @@ public class screenshots : MonoBehaviour
     // Take a shot immediately
     IEnumerator Start()
     {
-        bytesPNG = new byte[522834];
-        isSavingScreenShots = false;
+        bytesPNG = new byte[16777216];
         StartCoroutine(UploadPNG());
         yield return null;
     }
@@ -28,9 +27,8 @@ public class screenshots : MonoBehaviour
 
     void saveScreenshot()
     {
-        // Create a Web Form
         string nameScreenShot = "rgb" + Time.frameCount.ToString() + ".png";
-        File.WriteAllBytes(Application.dataPath + "/imgs/" + nameScreenShot, bytesPNG);
+        File.WriteAllBytes(Application.dataPath + "/" + nameScreenShot, bytesPNG);
         print(Application.dataPath);
     }
 
@@ -63,9 +61,7 @@ public class screenshots : MonoBehaviour
        
         if (isSavingScreenShots)
         {
-           // Texture2D tex = zedCam.GetComponent<ZEDRenderingPlane>().TextureEye;
-           // bytesPNG = tex.EncodeToPNG();
-            //saveScreenshot();
+            saveScreenshot();
         }
         
         yield return null;

@@ -54,7 +54,7 @@ public class ZEDSpatialMappingManager : MonoBehaviour
     /// <summary>
     /// The core of spatial mapping
     /// </summary>
-    private ZEDSpatialMapping spatialMapping;
+    public ZEDSpatialMapping spatialMapping;
     private ZEDManager manager;
 
     private void Start()

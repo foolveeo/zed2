@@ -21,15 +21,16 @@ public class Client : MonoBehaviour {
     public GameObject wolrdCoord;
     public GameObject recorder;
     private byte[] bytesScreenshotPNG;
-
+    private bool boolStartWorldCoord;
     private string savedReceivedMsg;
 
     // Use this for initialization 	
     void Start()
     {
+        boolStartWorldCoord = false;
         receivedMsg = "";
         ConnectToTcpServer();
-        bytesScreenshotPNG = new byte[65536];
+        bytesScreenshotPNG = new byte[16777216];
         if (sendCheckerboardBtn != null)
         {
             sendCheckerboardBtn.onClick.AddListener(SendCheckerboardScreenShot);
@@ -80,7 +81,7 @@ public class Client : MonoBehaviour {
                         // Convert byte array to string message. 						
                         savedReceivedMsg = Encoding.UTF8.GetString(incomingData);
                         Debug.Log("server message received as: " + savedReceivedMsg);
-                        wolrdCoord.GetComponent<ARKitConversion>().start = true;
+                        boolStartWorldCoord = true;
                     }
                 }
             }

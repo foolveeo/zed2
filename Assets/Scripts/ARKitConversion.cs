@@ -12,13 +12,15 @@ public class ARKitConversion : MonoBehaviour {
     {
         public Matrix4x4 ARWorld_2_ARCam;
         public Matrix4x4 ARCam_2_ZEDCam;
+        public float azimuthAngle;
+        public float zenithAngle;
     }
     
     public GameObject ZEDCamera;
     public GameObject ZEDWorldCoord;
     public GameObject tcpManagerARKit;
     public GameObject tcpManagerPython;
-
+    public GameObject dirLight;
 
     public bool start;
     public bool stop;
@@ -65,6 +67,8 @@ public class ARKitConversion : MonoBehaviour {
             {
                 TCPStrings tcpValues;
                 tcpValues = setValues(tcpMsg);
+                dirLight.GetComponent<SunDirectionAR>().azimuth = tcpValues.azimuthAngle;
+                dirLight.GetComponent<SunDirectionAR>().zenith = tcpValues.zenithAngle;
 
                 ARKitWorld_2_ARKitCam = tcpValues.ARWorld_2_ARCam;
                 Matrix4x4 iPhoneOrientation = Matrix4x4.Inverse( Matrix4x4.Rotate(Quaternion.Euler(0, 0, -90)));
@@ -97,13 +101,17 @@ public class ARKitConversion : MonoBehaviour {
         TCPStrings retVal;
         Matrix4x4 ARMat = new Matrix4x4();
         Matrix4x4 ZEDMat = new Matrix4x4();
+        float azimuth;
+        float zenith;
+
         string[] strings = _string.Split('?');
-        string ARMatString = strings[0];
-        string ZEDMatString = strings[1];
+        string ARMatString = strings[1];
+        string ZEDMatString = strings[0];
+        string angles = strings[2];
         
 
-        string[] ARMatRows = ARMatString.Split('\t');
-        string[] ZEDMatRows = ZEDMatString.Split('\t');
+        string[] ARMatRows = ARMatString.Split('!');
+        string[] ZEDMatRows = ZEDMatString.Split('!');
 
 
         int i = 0;
@@ -112,7 +120,7 @@ public class ARKitConversion : MonoBehaviour {
         {
             if(row != "" && row != "\n")
             {
-                string[] columns = row.Split(' ');
+                string[] columns = row.Split('=');
                 foreach (var col in columns)
                 {
                     ARMat[i, j] = float.Parse(col);
@@ -131,7 +139,7 @@ public class ARKitConversion : MonoBehaviour {
         {
             if (row != "" && row != "\n")
             {
-                string[] columns = row.Split(' ');
+                string[] columns = row.Split('=');
                 foreach (var col in columns)
                 {
                     ZEDMat[i, j] = float.Parse(col);
@@ -142,9 +150,15 @@ public class ARKitConversion : MonoBehaviour {
             }
         }
 
+        string[] azZen = angles.Split('!');
+        azimuth = float.Parse(azZen[0]);
+        zenith = float.Parse(azZen[1]);
 
         retVal.ARCam_2_ZEDCam = ZEDMat;
         retVal.ARWorld_2_ARCam = ARMat;
+        retVal.zenithAngle = zenith;
+        retVal.azimuthAngle = azimuth;
+
 
         return retVal;
 
