@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.IO;
 
 public class ARKitConversion : MonoBehaviour {
 
-    public Matrix4x4 ARKitWorld_2_ARKitCam;
-    public Vector3 eulerAngles_ARKitCam_2_ZEDCam;
+    private Matrix4x4 ARKitWorld_2_ARKitCam;
+    //public Vector3 eulerAngles_ARKitCam_2_ZEDCam;
     
     struct TCPStrings
     {
@@ -22,8 +23,9 @@ public class ARKitConversion : MonoBehaviour {
     public GameObject tcpManagerPython;
     public GameObject dirLight;
 
-    public bool start;
-    public bool stop;
+    public string sessionID;
+
+    private bool done;
 
     // computed runtime
     private Matrix4x4 ZEDCam_2_ZEDWorld;
@@ -32,67 +34,45 @@ public class ARKitConversion : MonoBehaviour {
     private string eulerAngles_ARKitCam_2_ZEDCam_string;
     private int i;
     private string tcpMsg;
-
-
-
+    private string vgis8Folder;
+    private string tcpFile;
+    
 
     void Start ()
     {
-        tcpMsg = "";
         
+        vgis8Folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        vgis8Folder = vgis8Folder.Remove(26);
+        vgis8Folder += "VGIS8/";
 
-        print("Rotation matrix around y -90:\n");
-        print(Matrix4x4.Rotate(Quaternion.Euler(new Vector3(0, -90, 0))).ToString());
+        tcpFile = vgis8Folder + sessionID + "/" + "ZED/tcpMessage.txt";
+
+        string[] lines = File.ReadAllLines(tcpFile);
+
+
+        tcpMsg = lines[0];
+
+        TCPStrings tcpValues;
+        tcpValues = setValues(tcpMsg);
+        dirLight.GetComponent<SunDirectionAR>().azimuth = tcpValues.azimuthAngle;
+        dirLight.GetComponent<SunDirectionAR>().zenith = tcpValues.zenithAngle;
+
+        ARKitWorld_2_ARKitCam = tcpValues.ARWorld_2_ARCam;
+        Matrix4x4 iPhoneOrientation = Matrix4x4.Inverse(Matrix4x4.Rotate(Quaternion.Euler(0, 0, -90)));
+
+        ARKitCam_2_ZEDCam = tcpValues.ARCam_2_ZEDCam;
+
+        ZEDCam_2_ZEDWorld = Matrix4x4.Rotate(ZEDCamera.GetComponent<Transform>().transform.rotation);
+        ARKitWorld_2_ARKitCam = Matrix4x4.Inverse(ARKitWorld_2_ARKitCam);
+        ARKitCam_2_ZEDCam = Matrix4x4.Inverse(ARKitCam_2_ZEDCam);
+        Matrix4x4 mat = ((iPhoneOrientation * ARKitWorld_2_ARKitCam) * ARKitCam_2_ZEDCam) * ZEDCam_2_ZEDWorld;
+
+        ZEDWorldCoord.GetComponent<Transform>().transform.rotation = rotationFromMatrix(mat);
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        if(start)
-        {
-
-            tcpMsg = tcpManagerPython.GetComponent<Client>().receivedMsg;
-            Debug.Log(tcpMsg);
-            // arkit facing same world direction and zed rotated 
-            //tcpMsg = "0.9639079 0.02977452 -0.2645658 0\t-0.03074987 0.999527 0.0004550568 0\t0.2644542 0.00769673 0.9643675 0\t0 0 0 1?1 0 0 0\t0 1 0 0\t0 0 1 0\t0 0 0 1";
-
-            //tcpMsg = "1 0 0 0\t0 1 0 0\t1 0 0 0\t0 0 0 1?0 0 -1 0\t0 1 0 0\t1 0 0 0\t0 0 0 1";
-            // identity transformation
-            //tcpMsg = "1 0 0 0\t0 1 0 0\t0 0 1 0\t0 0 0 1?1 0 0 0\t0 1 0 0\t0 0 1 0\t0 0 0 1";
-
-            //tcpMsg = "-0.06967151 0.009611169 -0.9975237 0\t-0.02294369 0.9996736 0.01123437 0\t0.9973061 0.02366959 -0.06942832 0\t0 0 0 1?0.70710 0.0000000 -0.7071068 0\t0.0000000 1.0000000 0.0000000 0\t0.7071068 0.0000000 0.7071068 0\t0 0 0 1";
-
-            //tcpMsg = "-0.0171262 0.238426 -0.9710096 0\t0.9998026 -0.005695939 -0.01903269 0\t-0.01006874 -0.971144 -0.2382814 0\t0 0 0 1?0.993546989 0.054356941 -0.099547494 0.020323315\t-0.041275985 0.990779334 0.129044971 0.057290808\t0.105644090 -0.124103322 0.986629460 -0.067694663\t0.000000000 0.000000000 0.000000000 1.000000000";
-            if (tcpMsg != "")
-            {
-                TCPStrings tcpValues;
-                tcpValues = setValues(tcpMsg);
-                dirLight.GetComponent<SunDirectionAR>().azimuth = tcpValues.azimuthAngle;
-                dirLight.GetComponent<SunDirectionAR>().zenith = tcpValues.zenithAngle;
-
-                ARKitWorld_2_ARKitCam = tcpValues.ARWorld_2_ARCam;
-                Matrix4x4 iPhoneOrientation = Matrix4x4.Inverse( Matrix4x4.Rotate(Quaternion.Euler(0, 0, -90)));
-                
-                ARKitCam_2_ZEDCam = tcpValues.ARCam_2_ZEDCam;
-
-                ZEDCam_2_ZEDWorld = Matrix4x4.Rotate(ZEDCamera.GetComponent<Transform>().transform.rotation);
-                ARKitWorld_2_ARKitCam = Matrix4x4.Inverse(ARKitWorld_2_ARKitCam);
-                ARKitCam_2_ZEDCam = Matrix4x4.Inverse(ARKitCam_2_ZEDCam);
-                Matrix4x4 mat = ((iPhoneOrientation * ARKitWorld_2_ARKitCam) * ARKitCam_2_ZEDCam) * ZEDCam_2_ZEDWorld;
-
-                ZEDWorldCoord.GetComponent<Transform>().transform.rotation = rotationFromMatrix(mat);
-            }
-            
-            if(stop)
-            {
-                start = false;
-                ZEDWorldCoord.GetComponent<Transform>().transform.rotation = new Quaternion();
-            }
-        }
-        else
-        {
-
-        }
 
     }
     

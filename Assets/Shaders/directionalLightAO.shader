@@ -3,7 +3,7 @@
 	Properties
 	{
 		_MainTex("Texture", 2D) = "white" {}
-		_Nbr_SkyLights("Number of Sky Lights", int) = 100
+		_NbrSkyLights("Number of Sky Lights", int) = 100
 	}
 		SubShader
 	{
@@ -82,14 +82,14 @@
 				}
 
 
-				int _Nbr_SkyLights;
+				uniform int _NbrSkyLights;
 
 
 				fixed4 frag(v2f i) : SV_Target
 				{
 					// compute shadow attenuation (1.0 = fully lit, 0.0 = fully shadowed)
 					fixed shadow = SHADOW_ATTENUATION(i);
-					float shadowMultiplier = shadow / _Nbr_SkyLights;
+					float shadowMultiplier = shadow / _NbrSkyLights;
 					// darken light's illumination with shadow, keep ambient intact
 
 					return float4(0.0f, 0.0f, shadowMultiplier, 1.0f);

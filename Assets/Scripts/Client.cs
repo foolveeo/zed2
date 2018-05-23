@@ -18,16 +18,13 @@ public class Client : MonoBehaviour {
     public int port;
     public string receivedMsg;
     public Button sendCheckerboardBtn;
-    public GameObject wolrdCoord;
     public GameObject recorder;
     private byte[] bytesScreenshotPNG;
-    private bool boolStartWorldCoord;
     private string savedReceivedMsg;
 
     // Use this for initialization 	
     void Start()
     {
-        boolStartWorldCoord = false;
         receivedMsg = "";
         ConnectToTcpServer();
         bytesScreenshotPNG = new byte[16777216];
@@ -81,7 +78,6 @@ public class Client : MonoBehaviour {
                         // Convert byte array to string message. 						
                         savedReceivedMsg = Encoding.UTF8.GetString(incomingData);
                         Debug.Log("server message received as: " + savedReceivedMsg);
-                        boolStartWorldCoord = true;
                     }
                 }
             }

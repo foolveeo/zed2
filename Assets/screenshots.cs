@@ -8,11 +8,45 @@ public class screenshots : MonoBehaviour
 {
 
     public byte[] bytesPNG;
-    public bool isSavingScreenShots;
+    public bool saveColor;
+    public bool saveDepth;
+    public bool saveNormal;
+    public bool saveShadow;
+    public GameObject session;
+    private string sessionID;
+    private string fileName;
+    string vgis8Folder;
 
     // Take a shot immediately
     IEnumerator Start()
     {
+        sessionID = session.GetComponent<session>().sessionID;
+        vgis8Folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+        vgis8Folder = vgis8Folder.Remove(26);
+        vgis8Folder += "VGIS8/";
+        fileName = vgis8Folder + sessionID + "/";
+        if (saveColor)
+        {
+            fileName += "rgb_";
+        }
+        else
+        {
+            if(saveDepth)
+            {
+                fileName += "depth_";
+            }
+            else
+            {
+                if (saveNormal)
+                {
+                    fileName += "normal_";
+                }
+                else
+                {
+                    fileName += "shadows_";
+                }
+            }
+        }
         bytesPNG = new byte[16777216];
         StartCoroutine(UploadPNG());
         yield return null;
@@ -21,15 +55,13 @@ public class screenshots : MonoBehaviour
 
     void Update()
     {
-
         StartCoroutine(UploadPNG());
     }
 
     void saveScreenshot()
     {
-        string nameScreenShot = "rgb" + Time.frameCount.ToString() + ".png";
-        File.WriteAllBytes(Application.dataPath + "/" + nameScreenShot, bytesPNG);
-        print(Application.dataPath);
+        string nameScreenShot = fileName + Time.frameCount.ToString() + ".png";
+        File.WriteAllBytes(vgis8Folder + nameScreenShot, bytesPNG);
     }
 
     private IEnumerator UploadPNG()
@@ -42,12 +74,8 @@ public class screenshots : MonoBehaviour
         int width = Screen.width;
         int height = Screen.height;
 
-
-        Debug.Log("screen width: " + Screen.width.ToString() + "screen height: " + Screen.height.ToString());
-
-        Debug.Log("Called UploadPng");
         
-        Texture2D tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+        Texture2D tex = new Texture2D(width, height, TextureFormat.RGBA32, false);
 
         // Read screen contents into the texture
         tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
@@ -59,7 +87,7 @@ public class screenshots : MonoBehaviour
         
         
        
-        if (isSavingScreenShots)
+        if (saveDepth || saveColor || saveNormal || saveShadow)
         {
             saveScreenshot();
         }

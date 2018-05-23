@@ -16,8 +16,7 @@ public class shadowMapper : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-        if(meshHolder != null)
+        if (meshHolder != null)
         {
             foreach (Transform child in meshHolder.transform)
             {
@@ -26,6 +25,7 @@ public class shadowMapper : MonoBehaviour {
                 meshRenderer.receiveShadows = true;
                 meshRenderer.material = mat;
             }
+
         }
         else
         {
