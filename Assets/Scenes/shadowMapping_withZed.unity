@@ -193,7 +193,7 @@ Prefab:
     - target: {fileID: 114177934168037988, guid: 76db3eb81fd21ae45bab5204e324ae42,
         type: 2}
       propertyPath: viewMode
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 76db3eb81fd21ae45bab5204e324ae42, type: 2}
@@ -354,7 +354,7 @@ MonoBehaviour:
   saveDepth: 0
   saveNormal: 0
   saveShadow: 0
-  SessionID: 
+  session: {fileID: 1243965447}
 --- !u!1001 &289197710
 Prefab:
   m_ObjectHideFlags: 0
@@ -537,7 +537,7 @@ MonoBehaviour:
   midRes: {fileID: 1908497037}
   highRes: {fileID: 386787452}
   mat: {fileID: 2100000, guid: f4cc2d398b0fe1e439bb34f3bc406490, type: 2}
-  resolution: 2
+  resolution: 0
 --- !u!1 &479645413 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1795562263255876, guid: 76db3eb81fd21ae45bab5204e324ae42,
@@ -593,7 +593,7 @@ MonoBehaviour:
   tcpManagerARKit: {fileID: 0}
   tcpManagerPython: {fileID: 681263044}
   dirLight: {fileID: 899270614}
-  sessionID: 1
+  session: {fileID: 1243965447}
 --- !u!1 &648628093 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1180261165772202, guid: 76db3eb81fd21ae45bab5204e324ae42,
@@ -711,7 +711,6 @@ MonoBehaviour:
   port: 5001
   receivedMsg: 
   sendCheckerboardBtn: {fileID: 211726433}
-  wolrdCoord: {fileID: 492775824}
   recorder: {fileID: 265942582}
 --- !u!4 &681263046
 Transform:
@@ -741,7 +740,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &831694032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1085,7 +1084,7 @@ Light:
     m_Strength: 1
     m_Bias: 0.05
     m_NormalBias: 0.4
-    m_NearPlane: 0.2
+    m_NearPlane: 0.099999994
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
@@ -1153,11 +1152,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fba7741894f24f24b8bd954941eb2b6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zed: {fileID: 0}
-  worldARKit: {fileID: 0}
-  sun: {fileID: 0}
-  sessionID: 
-  save: 0
+  zed: {fileID: 840583758}
+  worldARKit: {fileID: 492775824}
+  sun: {fileID: 899270614}
+  session: {fileID: 1243965447}
+  save: 1
 --- !u!1001 &1039057495
 Prefab:
   m_ObjectHideFlags: 0
@@ -1212,6 +1211,47 @@ Prefab:
 GameObject:
   m_PrefabParentObject: {fileID: 100002, guid: 32201d32299feb04faebc76ed5eedae2, type: 3}
   m_PrefabInternal: {fileID: 289197710}
+--- !u!1 &1243965447
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1243965449}
+  - component: {fileID: 1243965448}
+  m_Layer: 0
+  m_Name: Session
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1243965448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1243965447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a314e22a6faa66149a93221317f92a9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sessionID: q
+--- !u!4 &1243965449
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1243965447}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.039724782, y: 0.6123064, z: 0.632444}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1305106911
 GameObject:
   m_ObjectHideFlags: 0

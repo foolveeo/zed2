@@ -22,8 +22,9 @@ public class ARKitConversion : MonoBehaviour {
     public GameObject tcpManagerARKit;
     public GameObject tcpManagerPython;
     public GameObject dirLight;
+    public GameObject session;
 
-    public string sessionID;
+    private string sessionID;
 
     private bool done;
 
@@ -40,10 +41,11 @@ public class ARKitConversion : MonoBehaviour {
 
     void Start ()
     {
-        
+        sessionID = session.GetComponent<session>().sessionID;
+
         vgis8Folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         vgis8Folder = vgis8Folder.Remove(26);
-        vgis8Folder += "VGIS8/";
+        vgis8Folder += "VGIS8/Sessions/";
 
         tcpFile = vgis8Folder + sessionID + "/" + "ZED/tcpMessage.txt";
 
